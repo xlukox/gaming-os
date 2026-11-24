@@ -1,0 +1,8 @@
+<Project>
+  <!-- Applies to every C# project: people on the team do not read C#, so the compiler is strict. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

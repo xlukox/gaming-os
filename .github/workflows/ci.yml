@@ -24,3 +24,12 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+
+  host:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet test GamingOS.sln
