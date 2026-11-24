@@ -47,8 +47,13 @@ export function LibraryScreen() {
         {games.map((item) => (
           <FocusButton
             key={item.id}
-            className="cover"
-            style={{ '--cover': item.accentColor } as React.CSSProperties}
+            className={item.coverUrl ? 'cover has-art' : 'cover'}
+            style={
+              {
+                '--cover': item.accentColor,
+                backgroundImage: item.coverUrl ? `url("${item.coverUrl}")` : undefined,
+              } as React.CSSProperties
+            }
             aria-label={item.title}
             aria-current={item.id === game.id ? 'true' : undefined}
             aria-disabled={!item.installed}
@@ -63,10 +68,15 @@ export function LibraryScreen() {
 
       <section className="hero" aria-label={game.title}>
         {/* Keyed so the artwork and title fade in again for every game. */}
-        <div key={game.id} className="hero-art" aria-hidden="true" />
+        <div
+          key={game.id}
+          className={game.heroUrl ? 'hero-art has-art' : 'hero-art'}
+          style={game.heroUrl ? ({ '--hero': `url("${game.heroUrl}")` } as React.CSSProperties) : undefined}
+          aria-hidden="true"
+        />
         <div key={`content-${game.id}`} className="hero-content">
           <div className="hero-main">
-            <h1>{game.title}</h1>
+            <h1>{game.logoUrl ? <img src={game.logoUrl} alt={game.title} /> : game.title}</h1>
             <p className="hero-chips">
               <span>{t(`library.platform.${game.platform}`)}</span>
               <span>{game.installed ? t('library.installed') : t('library.notInstalled')}</span>

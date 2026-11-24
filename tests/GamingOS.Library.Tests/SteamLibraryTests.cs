@@ -157,6 +157,35 @@ public class SteamLibraryTests
     }
 
     [Fact]
+    public void Artwork_is_found_directly_or_in_a_hashed_subfolder_and_missing_art_is_null()
+    {
+        var cache = Directory.CreateTempSubdirectory("gamingos-art-").FullName;
+        try
+        {
+            Directory.CreateDirectory(Path.Combine(cache, "550"));
+            File.WriteAllText(Path.Combine(cache, "550", "library_600x900.jpg"), "");
+            Directory.CreateDirectory(Path.Combine(cache, "730", "abc123"));
+            File.WriteAllText(Path.Combine(cache, "730", "abc123", "library_capsule.jpg"), "");
+            File.WriteAllText(Path.Combine(cache, "730", "abc123", "library_hero.jpg"), "");
+
+            var direct = LibraryModule.ToDto(new SteamGame(550, "A", "x", true), cache);
+            var hashed = LibraryModule.ToDto(new SteamGame(730, "B", "x", true), cache);
+            var none = LibraryModule.ToDto(new SteamGame(999, "C", "x", true), cache);
+
+            Assert.Equal("https://steam-art.gamingos.local/550/library_600x900.jpg", direct.CoverUrl);
+            Assert.Null(direct.HeroUrl);
+            Assert.Equal("https://steam-art.gamingos.local/730/abc123/library_capsule.jpg", hashed.CoverUrl);
+            Assert.Equal("https://steam-art.gamingos.local/730/abc123/library_hero.jpg", hashed.HeroUrl);
+            Assert.Null(hashed.LogoUrl);
+            Assert.Null(none.CoverUrl);
+        }
+        finally
+        {
+            Directory.Delete(cache, recursive: true);
+        }
+    }
+
+    [Fact]
     public void ToDto_gives_the_ui_a_steam_game_with_a_stable_colour()
     {
         var dto = LibraryModule.ToDto(new SteamGame(550, "Left 4 Dead 2", "x", Installed: true));

@@ -51,6 +51,16 @@
     transform 0.2s ease-out;
 }
 
+/* Real cover from the platform: it carries the title itself. */
+.cover.has-art {
+  background-size: cover;
+  background-position: center;
+}
+
+.cover.has-art span {
+  display: none;
+}
+
 .cover[aria-disabled='true'] {
   filter: saturate(0.3);
 }
@@ -92,6 +102,22 @@
     radial-gradient(40rem 26rem at 95% 100%, oklch(from var(--accent) 0.6 0.22 calc(h - 50)), transparent 70%),
     linear-gradient(180deg, color-mix(in oklab, var(--accent) 35%, #1b1466), var(--accent));
   animation: hero-in 0.5s ease-out;
+}
+
+.hero-art.has-art {
+  background:
+    linear-gradient(90deg, rgb(9 7 28 / 0.94) 0%, rgb(9 7 28 / 0.6) 36%, transparent 70%),
+    linear-gradient(0deg, rgb(9 7 28 / 0.9), transparent 55%),
+    var(--hero) center / cover no-repeat;
+}
+
+.hero h1 img {
+  display: block;
+  max-width: min(30rem, 100%);
+  max-height: 11rem;
+  object-fit: contain;
+  object-position: left bottom;
+  filter: drop-shadow(0 0 1.5rem rgb(0 0 0 / 0.6));
 }
 
 .hero-content {

@@ -9,22 +9,41 @@ public static class LibraryModule
 {
     public static void Register(IpcRouter router)
     {
-        router.Register("library.list", _ => Task.FromResult<object?>(SteamGames().Select(ToDto).ToArray()));
+        router.Register("library.list", _ => Task.FromResult<object?>(List()));
         router.Register("library.launch", parameters =>
         {
             var gameId = parameters?.GetProperty("gameId").GetInt64() ?? throw new ArgumentException("gameId is required.");
-            Process.Start(new ProcessStartInfo(LaunchUri(gameId, SteamGames())) { UseShellExecute = true });
+            var steamPath = SteamLibrary.FindSteamPath() ?? throw new InvalidOperationException("Steam is not installed.");
+            Process.Start(new ProcessStartInfo(LaunchUri(gameId, SteamLibrary.Scan(steamPath))) { UseShellExecute = true });
             return Task.FromResult<object?>(null);
         });
     }
 
+    /// <summary>
+    /// Folders of images the host should serve to the UI, keyed by the host name used in artwork addresses.
+    /// </summary>
+    public static IReadOnlyDictionary<string, string> ArtworkFolders() =>
+        SteamLibrary.FindSteamPath() is { } steamPath && Directory.Exists(SteamArtwork.CacheFolder(steamPath))
+            ? new Dictionary<string, string> { [SteamArtwork.Host] = SteamArtwork.CacheFolder(steamPath) }
+            : [];
+
     // shortcut: rescans on every request, cache in the database once it exists and libraries get large.
-    private static IReadOnlyList<SteamGame> SteamGames() =>
-        SteamLibrary.FindSteamPath() is { } steamPath ? SteamLibrary.Scan(steamPath) : [];
+    private static GameDto[] List()
+    {
+        if (SteamLibrary.FindSteamPath() is not { } steamPath) return [];
+        var artwork = SteamArtwork.CacheFolder(steamPath);
+        return [.. SteamLibrary.Scan(steamPath).Select(game => ToDto(game, artwork))];
+    }
 
     // shortcut: the Steam app id doubles as the game id, replace with a database id when Epic and GOG arrive.
-    public static GameDto ToDto(SteamGame game) =>
-        new(game.AppId, game.Name, "steam", game.Installed, PlaytimeMinutes: null, AccentColor(game.AppId));
+    public static GameDto ToDto(SteamGame game, string? artworkFolder = null) =>
+        new(game.AppId, game.Name, "steam", game.Installed, PlaytimeMinutes: null, AccentColor(game.AppId))
+        {
+            // Steam renamed the portrait cover over time; both names are still found on disk.
+            CoverUrl = artworkFolder is null ? null : SteamArtwork.Find(artworkFolder, game.AppId, "library_600x900.jpg", "library_capsule.jpg"),
+            HeroUrl = artworkFolder is null ? null : SteamArtwork.Find(artworkFolder, game.AppId, "library_hero.jpg"),
+            LogoUrl = artworkFolder is null ? null : SteamArtwork.Find(artworkFolder, game.AppId, "logo.png"),
+        };
 
     /// <summary>A stable, distinct colour per game until real artwork provides one.</summary>
     public static string AccentColor(long appId) => $"hsl({appId * 137 % 360} 85% 62%)";
