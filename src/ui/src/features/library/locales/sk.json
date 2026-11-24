@@ -6,6 +6,7 @@
   "library.playtime": "{hours} h odohraných",
   "library.playtimeUnknown": "Čas hrania zatiaľ nemeraný",
   "library.play": "Spustiť hru",
+  "library.whatsNew": "Čo je nové",
   "library.installed": "Nainštalovaná",
   "library.notInstalled": "Hra nie je nainštalovaná",
   "library.launching": "Spúšťam {title}…",

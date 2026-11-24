@@ -1,9 +1,9 @@
 import { setFocus } from '@noriginmedia/norigin-spatial-navigation';
 import { useEffect, useState } from 'react';
-import type { GameDto } from '../../contracts/api';
+import type { GameDto, NewsItemDto } from '../../contracts/api';
 import { bridge } from '../../contracts/bridge';
 import { FocusButton } from '../../shell/Focusable';
-import { useT } from '../../shell/settings';
+import { useSettings, useT } from '../../shell/settings';
 import './library.css';
 
 export function LibraryScreen() {
@@ -12,6 +12,8 @@ export function LibraryScreen() {
   const [error, setError] = useState(false);
   const [selected, setSelected] = useState<GameDto | null>(null);
   const [launchedId, setLaunchedId] = useState<number | null>(null);
+  const [news, setNews] = useState<NewsItemDto[]>([]);
+  const { lang } = useSettings();
 
   useEffect(() => {
     const load = () => bridge.call('library.list').then(setGames, () => setError(true));
@@ -47,6 +49,26 @@ export function LibraryScreen() {
     },
     [],
   );
+
+  // News for the selected game. The short wait keeps fast browsing from asking for every game passed.
+  const gameId = selected?.id ?? games?.[0]?.id;
+  useEffect(() => {
+    setNews([]);
+    if (gameId === undefined) return;
+    let current = true;
+    const timer = setTimeout(
+      () =>
+        bridge.call('intel.news', { gameId }).then(
+          (items) => current && setNews(items),
+          () => {}, // no news is not worth an error message
+        ),
+      350,
+    );
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [gameId]);
 
   if (error) return <p className="library-note">{t('library.loadFailed')}</p>;
   if (!games) return <p className="library-note">{t('library.loading')}</p>;
@@ -111,11 +133,28 @@ export function LibraryScreen() {
               </p>
             </div>
           </div>
-          <p className="hero-facts">
-            {game.playtimeMinutes === null
-              ? t('library.playtimeUnknown')
-              : t('library.playtime', { hours: Math.round(game.playtimeMinutes / 60) })}
-          </p>
+          <div className="hero-side">
+            {news.length > 0 && (
+              <section className="news" aria-labelledby="news-title">
+                <h2 id="news-title">{t('library.whatsNew')}</h2>
+                <ul>
+                  {news.map((item) => (
+                    <li key={item.url}>
+                      <span>{item.title}</span>
+                      <time dateTime={item.publishedAt}>
+                        {new Date(item.publishedAt).toLocaleDateString(lang, { day: 'numeric', month: 'long' })}
+                      </time>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            <p className="hero-facts">
+              {game.playtimeMinutes === null
+                ? t('library.playtimeUnknown')
+                : t('library.playtime', { hours: Math.round(game.playtimeMinutes / 60) })}
+            </p>
+          </div>
         </div>
       </section>
     </div>

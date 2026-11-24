@@ -6,7 +6,7 @@ Celý plán, architektúra a zdôvodnenia rozhodnutí: [docs/PLAN.md](docs/PLAN.
 
 ## Stav
 
-Etapa 0. Existuje kostra UI (`src/ui`) a kostra hostu (`src/host`, `src/core`): okno na celú obrazovku, ktoré zobrazí UI a odpovedá na jeho požiadavky. Modul Library číta nainštalované hry zo Steamu a vie ich spustiť. Epic, GOG, obaly hier a databáza ešte neexistujú.
+Etapa 0. Existuje kostra UI (`src/ui`) a kostra hostu (`src/host`, `src/core`): okno na celú obrazovku, ktoré zobrazí UI a odpovedá na jeho požiadavky. Modul Library číta nainštalované hry zo Steamu aj s obalmi a vie ich spustiť; modul Intel k nim zobrazuje novinky. Epic, GOG, čas hrania a databáza ešte neexistujú.
 
 ## Príkazy
 
@@ -29,6 +29,7 @@ Host, spúšťa sa v koreni repozitára:
 - `src/core/GamingOS.Core/` – spoločný základ bez závislosti na okne. `IpcRouter` prijíma požiadavky UI a posiela ich zaregistrovaným funkciám.
 - `src/host/GamingOS.Host/` – okno (WPF + WebView2). Registruje funkcie do `IpcRouter` a púšťa dnu iba vlastné UI.
 - `src/modules/GamingOS.Library/` – knižnica hier. `LibraryModule.Register` pridá do `IpcRouter` funkcie `library.*`; `Steam/` číta lokálne súbory Steamu (`libraryfolders.vdf`, `appmanifest_*.acf`).
+- `src/modules/GamingOS.Intel/` – novinky k hrám. `intel.news` číta oficiálne oznámenia z verejného rozhrania Steamu (bez kľúča; odchádza len číslo hry) a pamätá si ich 30 minút.
 - `tests/` – testy; každý projekt má vlastný testovací projekt.
 - `Directory.Build.props` – prísne nastavenia kompilátora pre všetky C# projekty.
 
