@@ -16,5 +16,8 @@
   <ItemGroup>
     <Content Include="..\..\ui\dist\**" LinkBase="ui" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\modules\GamingOS.Library\GamingOS.Library.csproj" />
+  </ItemGroup>
 
 </Project>

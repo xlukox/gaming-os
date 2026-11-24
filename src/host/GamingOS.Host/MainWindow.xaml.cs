@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows;
 using GamingOS.Core;
+using GamingOS.Library;
 using Microsoft.Web.WebView2.Core;
 
 namespace GamingOS.Host;
@@ -16,8 +17,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(7, 6, 22);
 
-        // Placeholder until the Library module exists: the UI shows its "no games" state.
-        _router.Register("library.list", _ => Task.FromResult<object?>(Array.Empty<object>()));
+        LibraryModule.Register(_router);
 
         Loaded += async (_, _) =>
         {
