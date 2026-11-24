@@ -16,6 +16,10 @@
   --line: rgb(140 110 255 / 0.28);
   --gutter: clamp(1.25rem, 2.5vw, 2.5rem);
 
+  /* Everything is sized in rem, so the interface grows with the screen: 16px at 1080p,
+     21px at 1440p, 32px at 4K, times the size chosen in Settings. */
+  font-size: calc(var(--scale, 1) * max(16px, 100vh / 67.5));
+
   color-scheme: dark;
   /* shortcut: system font, the design's Saira headings arrive with a bundled font in its own PR. */
   font-family: 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
@@ -41,6 +45,19 @@ body {
     radial-gradient(40rem 28rem at 50% 120%, rgb(74 96 255 / 0.22), transparent 70%),
     var(--ink);
   color: var(--text);
+}
+
+/* Living Interface: the selected game's artwork, heavily blurred, lights the whole interface.
+   A screen sets --backdrop to url(...); without it only the glows above remain. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -12%;
+  z-index: -1;
+  background: var(--backdrop, none) center / cover no-repeat;
+  filter: blur(4.5rem) saturate(1.5);
+  opacity: 0.5;
+  transition: background-image 0.7s ease-out;
 }
 
 .shell {
@@ -146,6 +163,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   :root,
+  body::before,
   .rail-item {
     transition: none;
   }

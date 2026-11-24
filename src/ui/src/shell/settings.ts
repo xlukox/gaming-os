@@ -13,7 +13,7 @@ const listeners = new Set<() => void>();
 
 function apply() {
   document.documentElement.lang = settings.lang;
-  document.documentElement.style.fontSize = `${settings.scale}%`;
+  document.documentElement.style.setProperty('--scale', String(settings.scale / 100));
 }
 apply();
 
