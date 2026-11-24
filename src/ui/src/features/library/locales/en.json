@@ -6,6 +6,7 @@
   "library.playtime": "{hours} h played",
   "library.playtimeUnknown": "Playtime not tracked yet",
   "library.play": "Play",
+  "library.whatsNew": "What's new",
   "library.installed": "Installed",
   "library.notInstalled": "Game is not installed",
   "library.launching": "Launching {title}…",

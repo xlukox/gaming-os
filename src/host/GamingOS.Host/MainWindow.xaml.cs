@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows;
 using GamingOS.Core;
+using GamingOS.Intel;
 using GamingOS.Library;
 using Microsoft.Web.WebView2.Core;
 
@@ -18,6 +19,7 @@ public partial class MainWindow : Window
         WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(7, 6, 22);
 
         LibraryModule.Register(_router);
+        IntelModule.Register(_router);
 
         Loaded += async (_, _) =>
         {
