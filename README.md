@@ -4,7 +4,17 @@ Herné prostredie pre Windows 11: jednotná knižnica hier zo Steamu, Epicu a GO
 
 *A console-like gaming hub for Windows 11. Early development – nothing to install yet.*
 
-Stav: **etapa 0**, kód ešte neexistuje. Plán je v [docs/PLAN.md](docs/PLAN.md).
+Stav: **etapa 0** – existuje kostra rozhrania s ukážkovými dátami, zatiaľ bez napojenia na skutočné hry. Plán je v [docs/PLAN.md](docs/PLAN.md).
+
+## Ako si to pozrieť
+
+```
+cd src/ui
+npm install
+npm run dev
+```
+
+Otvor http://localhost:5173. Ovláda sa šípkami a Enterom, Esc vracia do menu; funguje aj gamepad.
 
 ## Ako sa pridať do vývoja
 
