@@ -1,0 +1,24 @@
+# .NET
+bin/
+obj/
+.vs/
+*.user
+Releases/
+
+# Node
+node_modules/
+dist/
+
+# lokálne dáta aplikácie
+*.db
+*.db-shm
+*.db-wal
+
+# osobné nastavenia Claude Code
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/worktrees/
+
+# tajomstvá
+.env
+.env.*
