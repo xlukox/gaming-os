@@ -56,6 +56,10 @@ public partial class MainWindow : Window
             if (response is not null) web.PostWebMessageAsJson(response);
         };
 
+        // Game artwork already on disk. DenyCors lets <img> and CSS show it but keeps scripts from reading the files.
+        foreach (var (host, folder) in LibraryModule.ArtworkFolders())
+            web.SetVirtualHostNameToFolderMapping(host, folder, CoreWebView2HostResourceAccessKind.DenyCors);
+
         if (devUrl is not null)
         {
             web.Navigate(devUrl);
