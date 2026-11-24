@@ -26,6 +26,7 @@
 }
 
 .cover {
+  --cover: var(--violet); /* glow colour; games without artwork override it with their own */
   flex: none;
   display: flex;
   align-items: flex-end;
@@ -109,6 +110,10 @@
     linear-gradient(90deg, rgb(9 7 28 / 0.94) 0%, rgb(9 7 28 / 0.6) 36%, transparent 70%),
     linear-gradient(0deg, rgb(9 7 28 / 0.9), transparent 55%),
     var(--hero) center / cover no-repeat;
+  /* The one ambient motion on the screen: the artwork drifts very slowly. */
+  animation:
+    hero-in 0.5s ease-out,
+    hero-drift 28s ease-in-out infinite alternate;
 }
 
 .hero h1 img {
@@ -128,7 +133,21 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1.5rem;
-  animation: hero-in 0.35s ease-out;
+}
+
+/* Title, tags and actions arrive one after another when the game changes. */
+.hero-main > *,
+.hero-facts {
+  animation: hero-rise 0.45s ease-out backwards;
+}
+
+.hero-main > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.hero-main > :nth-child(3),
+.hero-facts {
+  animation-delay: 0.16s;
 }
 
 .hero-main {
@@ -224,6 +243,19 @@
   }
 }
 
+@keyframes hero-drift {
+  to {
+    transform: scale(1.07) translateX(-1.5%);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .library-games {
     scroll-behavior: auto;
@@ -233,7 +265,9 @@
     transition: none;
   }
   .hero-art,
-  .hero-content {
+  .hero-art.has-art,
+  .hero-main > *,
+  .hero-facts {
     animation: none;
   }
 }

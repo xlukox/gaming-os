@@ -26,9 +26,27 @@ export function LibraryScreen() {
   }, [hasGames]);
 
   // Living Interface: the whole shell takes the colour of the selected game.
+  // With real artwork the blurred image provides the colour and the accent stays the brand violet;
+  // without it the game's own colour does the job.
   useEffect(() => {
-    if (selected) document.documentElement.style.setProperty('--accent', selected.accentColor);
+    if (!selected) return;
+    const root = document.documentElement.style;
+    if (selected.heroUrl) {
+      root.setProperty('--backdrop', `url("${selected.heroUrl}")`);
+      root.removeProperty('--accent');
+    } else {
+      root.removeProperty('--backdrop');
+      root.setProperty('--accent', selected.accentColor);
+    }
   }, [selected]);
+  // Leaving the library must not leave a game's colours on other screens.
+  useEffect(
+    () => () => {
+      document.documentElement.style.removeProperty('--backdrop');
+      document.documentElement.style.removeProperty('--accent');
+    },
+    [],
+  );
 
   if (error) return <p className="library-note">{t('library.loadFailed')}</p>;
   if (!games) return <p className="library-note">{t('library.loading')}</p>;
@@ -50,7 +68,7 @@ export function LibraryScreen() {
             className={item.coverUrl ? 'cover has-art' : 'cover'}
             style={
               {
-                '--cover': item.accentColor,
+                '--cover': item.coverUrl ? undefined : item.accentColor,
                 backgroundImage: item.coverUrl ? `url("${item.coverUrl}")` : undefined,
               } as React.CSSProperties
             }
