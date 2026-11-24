@@ -11,6 +11,10 @@ export interface GameDto {
   installed: boolean;
   playtimeMinutes: number | null; // null = the platform does not provide it and we have not tracked any yet
   accentColor: string;
+  // Artwork addresses the UI can load directly; null when the platform has none on disk.
+  coverUrl: string | null; // portrait cover, 2:3
+  heroUrl: string | null; // wide background image
+  logoUrl: string | null; // game logo with transparent background
 }
 
 export interface Api {

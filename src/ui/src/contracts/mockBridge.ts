@@ -1,7 +1,7 @@
 import type { Bridge, GameDto } from './api';
 
 // Fictional titles on purpose: no real game names or artwork in the repository.
-const games: GameDto[] = [
+const titles: Omit<GameDto, 'coverUrl' | 'heroUrl' | 'logoUrl'>[] = [
   { id: 1, title: 'Neon Drift', platform: 'steam', installed: true, playtimeMinutes: 2530, accentColor: '#2fe6de' },
   { id: 2, title: 'Hollow Tides', platform: 'epic', installed: true, playtimeMinutes: null, accentColor: '#3d7bff' },
   { id: 3, title: 'Iron Orchard', platform: 'gog', installed: true, playtimeMinutes: 410, accentColor: '#9b5cff' },
@@ -11,6 +11,8 @@ const games: GameDto[] = [
   { id: 7, title: 'Ashen Circuit', platform: 'epic', installed: false, playtimeMinutes: null, accentColor: '#22d3a6' },
   { id: 8, title: 'Lantern Road', platform: 'manual', installed: true, playtimeMinutes: 30, accentColor: '#c05cff' },
 ];
+// No artwork in the mock: the UI falls back to the generated visuals.
+const games: GameDto[] = titles.map((game) => ({ ...game, coverUrl: null, heroUrl: null, logoUrl: null }));
 
 /** Stands in for the host so the UI runs in a plain browser (`npm run dev`). */
 export const mockBridge = {
