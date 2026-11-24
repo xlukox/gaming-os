@@ -1,0 +1,15 @@
+{
+  "library.title": "Library",
+  "library.loading": "Loading games…",
+  "library.loadFailed": "The library could not be loaded. Restart the app.",
+  "library.empty": "No games found. Install a game through Steam, Epic or GOG and it will show up here.",
+  "library.playtime": "{hours} h played",
+  "library.playtimeUnknown": "Playtime not tracked yet",
+  "library.pressToPlay": "Press A or Enter to play",
+  "library.notInstalled": "Game is not installed",
+  "library.launching": "Launching {title}…",
+  "library.platform.steam": "Steam",
+  "library.platform.epic": "Epic Games",
+  "library.platform.gog": "GOG",
+  "library.platform.manual": "Added manually"
+}

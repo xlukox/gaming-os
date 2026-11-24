@@ -1,0 +1,15 @@
+{
+  "library.title": "Knižnica",
+  "library.loading": "Načítavam hry…",
+  "library.loadFailed": "Knižnicu sa nepodarilo načítať. Reštartuj aplikáciu.",
+  "library.empty": "Nenašli sa žiadne hry. Nainštaluj hru cez Steam, Epic alebo GOG a objaví sa tu.",
+  "library.playtime": "{hours} h odohraných",
+  "library.playtimeUnknown": "Čas hrania zatiaľ nemeraný",
+  "library.pressToPlay": "Stlač A alebo Enter a hraj",
+  "library.notInstalled": "Hra nie je nainštalovaná",
+  "library.launching": "Spúšťam {title}…",
+  "library.platform.steam": "Steam",
+  "library.platform.epic": "Epic Games",
+  "library.platform.gog": "GOG",
+  "library.platform.manual": "Pridaná ručne"
+}

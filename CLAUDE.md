@@ -6,7 +6,23 @@ Celý plán, architektúra a zdôvodnenia rozhodnutí: [docs/PLAN.md](docs/PLAN.
 
 ## Stav
 
-Etapa 0 – kód ešte neexistuje. PR, ktorý pridá kostru, sem doplní príkazy na build, test a spustenie.
+Etapa 0. Existuje kostra UI (`src/ui`), ktorá beží v prehliadači proti ukážkovým dátam. Host (.NET) ešte neexistuje.
+
+## Príkazy
+
+Všetky sa spúšťajú v `src/ui`:
+
+- `npm install` – raz po naklonovaní
+- `npm run dev` – UI v prehliadači na http://localhost:5173 s ukážkovými dátami (`contracts/mockBridge.ts`)
+- `npm test` – testy
+- `npm run build` – typecheck + produkčný build
+
+## Ako je UI poskladané
+
+- `src/ui/src/shell/` – navigácia, ovládanie (klávesnica, gamepad), preklady, nastavenia, spoločné tokeny v `shell.css`.
+- `src/ui/src/features/<názov>/` – jedna obrazovka. Zaregistruje sa sama súborom `feature.ts`; preklady má v `locales/sk.json` a `locales/en.json`.
+- `src/ui/src/contracts/` – jediné miesto, kde UI hovorí s hostom. `api.ts` je kontrakt, `bridge.ts` vyberie skutočný host alebo ukážkové dáta.
+- Ovládateľné prvky sú `FocusButton` zo `shell/Focusable.tsx`, inak sa na ne nedá dostať gamepadom.
 
 ## Stack
 

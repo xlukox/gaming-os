@@ -1,0 +1,116 @@
+/* Design tokens. --accent follows the focused game (Living Interface); registering it lets it animate. */
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #3d7bff;
+}
+
+:root {
+  --ink: #07080f;
+  --text: #e9ecff;
+  --muted: #8f95bd;
+  --line: #2a2f52;
+  --gutter: clamp(2rem, 5vw, 5rem);
+
+  color-scheme: dark;
+  /* Segoe UI Variable ships with Windows 11: no font download, crisp at TV distance. */
+  font-family: 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
+  transition: --accent 0.5s ease-out;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(90rem 55rem at 78% -10%, color-mix(in oklab, var(--accent) 34%, transparent), transparent 70%),
+    radial-gradient(60rem 40rem at 0% 110%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
+    var(--ink);
+  color: var(--text);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100%;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 15rem;
+  padding: 3rem 1.25rem;
+  border-right: 1px solid var(--line);
+  background: rgb(7 8 15 / 0.55);
+}
+
+.rail-name {
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+}
+
+.rail-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rail-item {
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 1.375rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rail-item[aria-current='page'] {
+  color: var(--text);
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+}
+
+.rail-item:focus-visible {
+  outline: 0.25rem solid var(--accent);
+  outline-offset: -0.25rem;
+  color: var(--text);
+}
+
+.stage,
+.screen {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.screen > * {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
