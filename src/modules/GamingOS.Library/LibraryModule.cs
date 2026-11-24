@@ -32,12 +32,14 @@ public static class LibraryModule
     {
         if (SteamLibrary.FindSteamPath() is not { } steamPath) return [];
         var artwork = SteamArtwork.CacheFolder(steamPath);
-        return [.. SteamLibrary.Scan(steamPath).Select(game => ToDto(game, artwork))];
+        var playtime = SteamPlaytime.Load(steamPath);
+        return [.. SteamLibrary.Scan(steamPath).Select(game =>
+            ToDto(game, artwork, playtime.TryGetValue(game.AppId, out var minutes) ? minutes : null))];
     }
 
     // shortcut: the Steam app id doubles as the game id, replace with a database id when Epic and GOG arrive.
-    public static GameDto ToDto(SteamGame game, string? artworkFolder = null) =>
-        new(game.AppId, game.Name, "steam", game.Installed, PlaytimeMinutes: null, AccentColor(game.AppId))
+    public static GameDto ToDto(SteamGame game, string? artworkFolder = null, int? playtimeMinutes = null) =>
+        new(game.AppId, game.Name, "steam", game.Installed, playtimeMinutes, AccentColor(game.AppId))
         {
             // Steam renamed the portrait cover over time; both names are still found on disk.
             CoverUrl = artworkFolder is null ? null : SteamArtwork.Find(artworkFolder, game.AppId, "library_600x900.jpg", "library_capsule.jpg"),
