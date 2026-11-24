@@ -6,6 +6,8 @@ export interface Feature {
   order: number;
   /** Translation key of the navigation label. */
   titleKey: string;
+  /** SVG path data for the navigation icon, drawn as a stroke on a 24x24 grid. */
+  icon: string;
   Screen: ComponentType;
 }
 

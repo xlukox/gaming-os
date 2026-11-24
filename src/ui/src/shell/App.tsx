@@ -32,7 +32,13 @@ export function App() {
   return (
     <div className="shell">
       <nav className="rail" aria-label={t('app.name')}>
-        <p className="rail-name">{t('app.name')}</p>
+        <p className="rail-name">
+          <svg aria-hidden="true" viewBox="0 0 30 30">
+            <path d="M3 5h24L15 27z" fill="none" stroke="#9b6bff" strokeWidth="3" strokeLinejoin="round" />
+            <path d="M10 10h10l-5 9z" fill="#5e7bff" />
+          </svg>
+          {t('app.name')}
+        </p>
         <FocusGroup focusKey="nav" className="rail-items">
           {features.map((feature) => (
             <FocusButton
@@ -41,6 +47,9 @@ export function App() {
               aria-current={feature.id === activeId ? 'page' : undefined}
               onClick={() => setActiveId(feature.id)}
             >
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d={feature.icon} />
+              </svg>
               {t(feature.titleKey)}
             </FocusButton>
           ))}
