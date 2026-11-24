@@ -2,20 +2,24 @@
 @property --accent {
   syntax: '<color>';
   inherits: true;
-  initial-value: #3d7bff;
+  initial-value: #9b6bff;
 }
 
 :root {
-  --ink: #07080f;
-  --text: #e9ecff;
-  --muted: #8f95bd;
-  --line: #2a2f52;
-  --gutter: clamp(2rem, 5vw, 5rem);
+  --ink: #070616;
+  --text: #f1eeff;
+  --muted: #b9b0e2;
+  --violet: #9b6bff;
+  --blue: #4a52f5;
+  /* Glass panels: translucent fill, thin violet edge. */
+  --panel: rgb(22 18 52 / 0.72);
+  --line: rgb(140 110 255 / 0.28);
+  --gutter: clamp(1.25rem, 2.5vw, 2.5rem);
 
   color-scheme: dark;
-  /* Segoe UI Variable ships with Windows 11: no font download, crisp at TV distance. */
+  /* shortcut: system font, the design's Saira headings arrive with a bundled font in its own PR. */
   font-family: 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
-  transition: --accent 0.5s ease-out;
+  transition: --accent 0.6s ease-out;
 }
 
 * {
@@ -32,8 +36,9 @@ body {
   margin: 0;
   overflow: hidden;
   background:
-    radial-gradient(90rem 55rem at 78% -10%, color-mix(in oklab, var(--accent) 34%, transparent), transparent 70%),
-    radial-gradient(60rem 40rem at 0% 110%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(56rem 32rem at 88% 0%, color-mix(in oklab, var(--accent) 34%, transparent), transparent 70%),
+    radial-gradient(48rem 32rem at 8% 100%, rgb(150 70 255 / 0.34), transparent 70%),
+    radial-gradient(40rem 28rem at 50% 120%, rgb(74 96 255 / 0.22), transparent 70%),
     var(--ink);
   color: var(--text);
 }
@@ -47,20 +52,27 @@ body {
 .rail {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  width: 15rem;
-  padding: 3rem 1.25rem;
+  gap: 1.75rem;
+  width: 13.5rem;
+  padding: 1.75rem 1rem;
   border-right: 1px solid var(--line);
-  background: rgb(7 8 15 / 0.55);
+  background: rgb(10 8 28 / 0.72);
 }
 
 .rail-name {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0;
-  padding: 0 1rem;
-  font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--muted);
+  padding: 0 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.rail-name svg {
+  width: 1.9rem;
+  height: 1.9rem;
 }
 
 .rail-items {
@@ -70,27 +82,50 @@ body {
 }
 
 .rail-item {
-  padding: 0.85rem 1rem;
-  border: 0;
-  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
   background: transparent;
   color: var(--muted);
   font: inherit;
-  font-size: 1.375rem;
+  font-size: 1.1rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
+  transition:
+    box-shadow 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.rail-item svg {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rail-item:hover {
+  color: var(--text);
 }
 
 .rail-item[aria-current='page'] {
-  color: var(--text);
-  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  border-color: rgb(190 160 255 / 0.55);
+  background: linear-gradient(90deg, #6b3bf0, var(--blue));
+  box-shadow: 0 0 1.4rem rgb(123 75 255 / 0.55);
+  color: #fff;
 }
 
 .rail-item:focus-visible {
-  outline: 0.25rem solid var(--accent);
-  outline-offset: -0.25rem;
-  color: var(--text);
+  outline: 0.2rem solid #fff;
+  outline-offset: 0.15rem;
+  color: #fff;
 }
 
 .stage,
@@ -110,7 +145,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
+  :root,
+  .rail-item {
     transition: none;
   }
 }
