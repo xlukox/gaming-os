@@ -6,16 +6,30 @@ Celý plán, architektúra a zdôvodnenia rozhodnutí: [docs/PLAN.md](docs/PLAN.
 
 ## Stav
 
-Etapa 0. Existuje kostra UI (`src/ui`), ktorá beží v prehliadači proti ukážkovým dátam. Host (.NET) ešte neexistuje.
+Etapa 0. Existuje kostra UI (`src/ui`) a kostra hostu (`src/host`, `src/core`): okno na celú obrazovku, ktoré zobrazí UI a odpovedá na jeho požiadavky. Knižnica zo skutočných hier ešte neexistuje, host vracia prázdny zoznam.
 
 ## Príkazy
 
-Všetky sa spúšťajú v `src/ui`:
+UI, spúšťa sa v `src/ui`:
 
 - `npm install` – raz po naklonovaní
 - `npm run dev` – UI v prehliadači na http://localhost:5173 s ukážkovými dátami (`contracts/mockBridge.ts`)
 - `npm test` – testy
 - `npm run build` – typecheck + produkčný build
+
+Host, spúšťa sa v koreni repozitára:
+
+- `dotnet test GamingOS.sln` – zostaví všetko a spustí testy
+- `dotnet run --project src/host/GamingOS.Host` – spustí okno; najprv treba `npm run build` v `src/ui`. Zatvára sa cez Alt+F4.
+- Premenná `GAMINGOS_UI_URL=http://localhost:5173` nasmeruje okno na bežiaci `npm run dev`.
+- Premenná `GAMINGOS_DATA_DIR` určí vlastný priečinok s dátami (pre viac inštancií naraz).
+
+## Ako je host poskladaný
+
+- `src/core/GamingOS.Core/` – spoločný základ bez závislosti na okne. `IpcRouter` prijíma požiadavky UI a posiela ich zaregistrovaným funkciám.
+- `src/host/GamingOS.Host/` – okno (WPF + WebView2). Registruje funkcie do `IpcRouter` a púšťa dnu iba vlastné UI.
+- `tests/` – testy; každý projekt má vlastný testovací projekt.
+- `Directory.Build.props` – prísne nastavenia kompilátora pre všetky C# projekty.
 
 ## Ako je UI poskladané
 
