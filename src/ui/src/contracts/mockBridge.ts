@@ -16,6 +16,16 @@ const games: GameDto[] = titles.map((game) => ({ ...game, coverUrl: null, heroUr
 
 /** Stands in for the host so the UI runs in a plain browser (`npm run dev`). */
 export const mockBridge = {
-  call: async (method: string) => (method === 'library.list' ? games : undefined),
+  call: async (method: string, params?: { gameId: number }) => {
+    if (method === 'library.list') return games;
+    // Every second game has news, so both states of the UI can be seen.
+    if (method === 'intel.news' && params && params.gameId % 2 === 1) {
+      return [
+        { title: 'Update 2.2: three new night tracks', url: 'https://example.com/news/1', publishedAt: '2026-11-21T10:00:00Z' },
+        { title: 'Hotfix for crashes when loading the garage', url: 'https://example.com/news/2', publishedAt: '2026-11-12T16:30:00Z' },
+      ];
+    }
+    return method === 'intel.news' ? [] : undefined;
+  },
   on: () => () => {},
 } as Bridge;

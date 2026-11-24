@@ -17,9 +17,17 @@ export interface GameDto {
   logoUrl: string | null; // game logo with transparent background
 }
 
+export interface NewsItemDto {
+  title: string;
+  url: string;
+  publishedAt: string; // ISO 8601
+}
+
 export interface Api {
   'library.list': { params: void; result: GameDto[] };
   'library.launch': { params: { gameId: number }; result: void };
+  /** Latest official announcements for a game, newest first. Empty when offline or the platform has none. */
+  'intel.news': { params: { gameId: number }; result: NewsItemDto[] };
 }
 
 export interface Events {
