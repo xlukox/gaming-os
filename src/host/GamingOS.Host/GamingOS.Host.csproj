@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\GamingOS.Library\GamingOS.Library.csproj" />
     <ProjectReference Include="..\..\modules\GamingOS.Intel\GamingOS.Intel.csproj" />
+    <ProjectReference Include="..\..\modules\GamingOS.Activity\GamingOS.Activity.csproj" />
   </ItemGroup>
 
 </Project>

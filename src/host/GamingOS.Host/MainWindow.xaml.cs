@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using GamingOS.Activity;
 using GamingOS.Core;
 using GamingOS.Intel;
 using GamingOS.Library;
@@ -40,6 +41,7 @@ public partial class MainWindow : Window
         // GAMINGOS_DATA_DIR lets several dev instances (git worktrees) run without sharing data.
         var dataDir = Environment.GetEnvironmentVariable("GAMINGOS_DATA_DIR")
             ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GamingOS");
+        ActivityModule.Start(new Database(Path.Combine(dataDir, "gamingos.db")), LibraryModule.InstalledGames);
         var environment = await CoreWebView2Environment.CreateAsync(userDataFolder: Path.Combine(dataDir, "WebView2"));
         await WebView.EnsureCoreWebView2Async(environment);
         var web = WebView.CoreWebView2;

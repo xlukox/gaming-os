@@ -9,8 +9,10 @@ public sealed record SteamGame(long AppId, string Name, string InstallPath, bool
 /// </summary>
 public static class SteamLibrary
 {
-    // Entries Steam keeps next to games that are not games (228980 = Steamworks Common Redistributables).
-    private static readonly HashSet<long> NotGames = [228980];
+    // Entries Steam keeps next to games that are not games: 228980 = Steamworks Common Redistributables,
+    // 431960 = Wallpaper Engine (runs all day, would count as endless play).
+    // shortcut: a fixed list, replace with the app type from Steam's appinfo.vdf when more software shows up.
+    private static readonly HashSet<long> NotGames = [228980, 431960];
 
     private const int StateFullyInstalled = 4;
 
