@@ -19,6 +19,12 @@ public static class LibraryModule
         });
     }
 
+    /// <summary>Installed games and their folders, for tracking which one is being played.</summary>
+    public static IReadOnlyList<InstalledGame> InstalledGames() =>
+        SteamLibrary.FindSteamPath() is { } steamPath
+            ? [.. SteamLibrary.Scan(steamPath).Where(game => game.Installed).Select(game => new InstalledGame(game.AppId, "steam", game.InstallPath))]
+            : [];
+
     /// <summary>
     /// Folders of images the host should serve to the UI, keyed by the host name used in artwork addresses.
     /// </summary>

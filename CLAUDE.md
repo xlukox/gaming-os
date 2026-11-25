@@ -6,7 +6,7 @@ Celý plán, architektúra a zdôvodnenia rozhodnutí: [docs/PLAN.md](docs/PLAN.
 
 ## Stav
 
-Etapa 0. Existuje kostra UI (`src/ui`) a kostra hostu (`src/host`, `src/core`): okno na celú obrazovku, ktoré zobrazí UI a odpovedá na jeho požiadavky. Modul Library číta nainštalované hry zo Steamu aj s obalmi a vie ich spustiť; modul Intel k nim zobrazuje novinky. Epic, GOG, čas hrania a databáza ešte neexistujú.
+Etapa 0. Existuje kostra UI (`src/ui`) a kostra hostu (`src/host`, `src/core`): okno na celú obrazovku, ktoré zobrazí UI a odpovedá na jeho požiadavky. Modul Library číta nainštalované hry zo Steamu aj s obalmi a vie ich spustiť; modul Intel k nim zobrazuje novinky; modul Activity zapisuje herné relácie do lokálnej databázy. Epic, GOG a obrazovky so štatistikami ešte neexistujú.
 
 ## Príkazy
 
@@ -26,10 +26,11 @@ Host, spúšťa sa v koreni repozitára:
 
 ## Ako je host poskladaný
 
-- `src/core/GamingOS.Core/` – spoločný základ bez závislosti na okne. `IpcRouter` prijíma požiadavky UI a posiela ich zaregistrovaným funkciám.
+- `src/core/GamingOS.Core/` – spoločný základ bez závislosti na okne. `IpcRouter` prijíma požiadavky UI a posiela ich zaregistrovaným funkciám. `Database` je lokálna SQLite (`gamingos.db` v priečinku dát); každý modul volá `db.Migrate("<modul>", krok1, krok2, …)` so svojimi tabuľkami s prefixom modulu. Zlúčený krok sa už nikdy nemení, pridáva sa nový.
 - `src/host/GamingOS.Host/` – okno (WPF + WebView2). Registruje funkcie do `IpcRouter` a púšťa dnu iba vlastné UI.
 - `src/modules/GamingOS.Library/` – knižnica hier. `LibraryModule.Register` pridá do `IpcRouter` funkcie `library.*`; `Steam/` číta lokálne súbory Steamu (`libraryfolders.vdf`, `appmanifest_*.acf`).
 - `src/modules/GamingOS.Intel/` – novinky k hrám. `intel.news` číta oficiálne oznámenia z verejného rozhrania Steamu (bez kľúča; odchádza len číslo hry) a pamätá si ich 30 minút.
+- `src/modules/GamingOS.Activity/` – herné relácie. Každých 5 s pozrie, či beží program z priečinka niektorej nainštalovanej hry (iba cesta k programu, nikdy pamäť hry), a zapíše reláciu do `act_sessions`.
 - `tests/` – testy; každý projekt má vlastný testovací projekt.
 - `Directory.Build.props` – prísne nastavenia kompilátora pre všetky C# projekty.
 
