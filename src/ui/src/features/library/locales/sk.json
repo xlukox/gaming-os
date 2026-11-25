@@ -5,6 +5,8 @@
   "library.empty": "Nenašli sa žiadne hry. Nainštaluj hru cez Steam, Epic alebo GOG a objaví sa tu.",
   "library.playtime": "{hours} h odohraných",
   "library.playtimeUnknown": "Čas hrania zatiaľ nemeraný",
+  "library.playtimeMinutes": "{minutes} min odohraných",
+  "library.neverPlayed": "Zatiaľ nehrané",
   "library.play": "Spustiť hru",
   "library.whatsNew": "Čo je nové",
   "library.installed": "Nainštalovaná",

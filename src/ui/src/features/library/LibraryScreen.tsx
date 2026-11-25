@@ -5,6 +5,7 @@ import { bridge } from '../../contracts/bridge';
 import { FocusButton } from '../../shell/Focusable';
 import { useSettings, useT } from '../../shell/settings';
 import './library.css';
+import { playtimeLabel } from './playtime';
 
 export function LibraryScreen() {
   const t = useT();
@@ -149,11 +150,7 @@ export function LibraryScreen() {
                 </ul>
               </section>
             )}
-            <p className="hero-facts">
-              {game.playtimeMinutes === null
-                ? t('library.playtimeUnknown')
-                : t('library.playtime', { hours: Math.round(game.playtimeMinutes / 60) })}
-            </p>
+            <p className="hero-facts">{t(...playtimeLabel(game.playtimeMinutes))}</p>
           </div>
         </div>
       </section>

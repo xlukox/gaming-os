@@ -186,11 +186,47 @@ public class SteamLibraryTests
     }
 
     [Fact]
+    public void Playtime_reads_minutes_per_game_and_ignores_everything_else()
+    {
+        var minutes = SteamPlaytime.Parse("""
+            "UserLocalConfigStore"
+            {
+            	"friends" { "123" { "name" "someone" } }
+            	"Software"
+            	{
+            		"Valve"
+            		{
+            			"Steam"
+            			{
+            				"apps"
+            				{
+            					"730" { "LastPlayed" "1795474927" "Playtime" "6123" "cloud" { "last_sync_state" "synchronized" } }
+            					"550" { "LastPlayed" "1700000000" }
+            					"620" { "Playtime" "abc" }
+            					"notanumber" { "Playtime" "5" }
+            				}
+            			}
+            		}
+            	}
+            }
+            """);
+
+        Assert.Equal(new Dictionary<long, int> { [730] = 6123 }, minutes);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("\"UserLocalConfigStore\" { \"Software\" { } }")]
+    [InlineData("\"UserLocalConfigStore\" {")]
+    public void Playtime_is_empty_when_the_file_has_no_usable_data(string text) => Assert.Empty(SteamPlaytime.Parse(text));
+
+    [Fact]
     public void ToDto_gives_the_ui_a_steam_game_with_a_stable_colour()
     {
         var dto = LibraryModule.ToDto(new SteamGame(550, "Left 4 Dead 2", "x", Installed: true));
 
         Assert.Equal((550, "Left 4 Dead 2", "steam", true, null), (dto.Id, dto.Title, dto.Platform, dto.Installed, dto.PlaytimeMinutes));
         Assert.Equal("hsl(110 85% 62%)", dto.AccentColor);
+        Assert.Equal(90, LibraryModule.ToDto(new SteamGame(550, "Left 4 Dead 2", "x", Installed: true), playtimeMinutes: 90).PlaytimeMinutes);
     }
 }

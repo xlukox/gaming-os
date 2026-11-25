@@ -5,6 +5,8 @@
   "library.empty": "No games found. Install a game through Steam, Epic or GOG and it will show up here.",
   "library.playtime": "{hours} h played",
   "library.playtimeUnknown": "Playtime not tracked yet",
+  "library.playtimeMinutes": "{minutes} min played",
+  "library.neverPlayed": "Not played yet",
   "library.play": "Play",
   "library.whatsNew": "What's new",
   "library.installed": "Installed",
